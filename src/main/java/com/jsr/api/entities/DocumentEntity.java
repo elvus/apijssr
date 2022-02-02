@@ -1,6 +1,6 @@
 package com.jsr.api.entities;
 
-import java.io.Serializable;
+/*import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
@@ -102,4 +102,4 @@ public class DocumentEntity implements Serializable{
     {
 
     }
-}
+}*/

@@ -43,7 +43,7 @@ public class ApiApplication {
 			http.csrf().disable()
 				.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/v1/document").permitAll()
 				.anyRequest().authenticated();
 		}
 	}

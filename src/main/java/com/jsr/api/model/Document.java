@@ -1,6 +1,98 @@
 package com.jsr.api.model;
 
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.SqlResultSetMapping;
+
+@Entity
+@SqlResultSetMapping(
+    name="documentmap",
+    classes = {
+        @ConstructorResult(
+            targetClass = Document.class,
+            columns = {
+                @ColumnResult(name="RUC_INFORMANTE",          type=String.class),
+                @ColumnResult(name="RAZON_INFORMANTE",        type=String.class),
+                @ColumnResult(name="RUC",                     type=String.class),
+                @ColumnResult(name="tipo_doc_usu",            type=String.class),
+                @ColumnResult(name="razon_social",            type=String.class),
+                @ColumnResult(name="TIPO_REGISTRO",           type=String.class),
+                @ColumnResult(name="TIPO_COMPROBANTE",        type=String.class),
+                @ColumnResult(name="ESTADO_COMPROBANTE",      type=String.class),
+                @ColumnResult(name="MOTIVO_ANULACIÓN",        type=String.class),
+                @ColumnResult(name="fecha_pago",              type=String.class),
+                @ColumnResult(name="tipo_pago",               type=String.class),
+                @ColumnResult(name="MONEDA_EXTRANJERA",       type=String.class),
+                @ColumnResult(name="TIMBRADO",                type=String.class),
+                @ColumnResult(name="numFactura",              type=String.class),
+                @ColumnResult(name="MONTO_GRAVADO_10",        type=String.class),
+                @ColumnResult(name="IVA10",                   type=String.class),
+                @ColumnResult(name="MONTO_GRAVADO_5",         type=String.class),
+                @ColumnResult(name="IVA5",                    type=String.class),
+                @ColumnResult(name="EXENTO",                  type=String.class),
+                @ColumnResult(name="total_comprobante",       type=String.class),
+                @ColumnResult(name="IMPUTA_IRE",              type=String.class),
+                @ColumnResult(name="IMPUTA_IVA",              type=String.class),
+                @ColumnResult(name="comprobante_asociado",    type=String.class),
+                @ColumnResult(name="comprobante_relacionado", type=String.class),
+                @ColumnResult(name="fecha_marangatu",         type=String.class),
+                @ColumnResult(name="origen_informacion",      type=String.class)
+            }
+        )
+    }
+) 
+@NamedNativeQuery(
+    name="Document.GenerateDocument", 
+    query="SELECT "+
+            "(SELECT SUBSTRING_INDEX(e.ruc_emp,'-',1)  FROM empresa e LIMIT 1) RUC_INFORMANTE "+
+            ",(SELECT e.nombre_emp FROM empresa e LIMIT 1) RAZON_INFORMANTE "+
+            ",CASE u.tipo_doc_usu WHEN 'RUC' THEN SUBSTRING_INDEX(u.num_doc_usu,'-',1) ELSE u.num_doc_usu END RUC " + 
+            ",u.tipo_doc_usu "+
+            ",CONCAT(u.nombre_usu, ' ', u.apellido_usu) razon_social "+
+            ",'VENTAS' TIPO_REGISTRO "+
+            ",'FACTURA' TIPO_COMPROBANTE"+ 
+            ",'ACEPTADO' ESTADO_COMPROBANTE "+
+            ",CASE c.estado "+
+            "WHEN 'ELIMINADO'  "+
+            "THEN 'IMPRESION INCORRECTA DEL COMPROBANTE' "+
+            "ELSE '' "+
+            "END MOTIVO_ANULACIÓN "+
+            ",p.fecha_pago "+
+            ",p.tipo_pago  "+
+            ",'NO' MONEDA_EXTRANJERA "+
+            ",'12345678' TIMBRADO "+
+            ",p.numFactura "+
+            ",(c.impTotal - c.IVA10 - c.ERSSAN) MONTO_GRAVADO_10 "+
+            ",c.IVA10  "+
+            ",0 MONTO_GRAVADO_5 "+
+            ",0 IVA5 "+
+            ",0 EXENTO "+
+            ",(c.impTotal - c.IVA10) total_comprobante "+
+            ",'NO' IMPUTA_IRE "+
+            ",'SI' IMPUTA_IVA "+
+            ",'' comprobante_asociado "+
+            ",'' comprobante_relacionado "+
+            ",'' fecha_marangatu "+
+            ",'' origen_informacion "+
+            "FROM "+
+            "usuarios u, "+
+            "comprobantes c, "+
+            "pagos_por_comprobantes ppc, "+
+            "detalle_pago dp,  "+
+            "pagos p "+
+            "where "+
+            "u.id_usuario = c.id_usuario "+
+            "AND c.id_comprobante = ppc.id_comprobante "+
+            "AND ppc.id_detalle = dp.iddetalle "+
+            "AND dp.id_pago = p.id_pago "+
+            "AND p.fecha_pago BETWEEN '2021-12-01' AND '2021-12-31';", 
+    resultSetMapping="documentmap")
+
 public class Document {
+    @EmbeddedId Long id;
     private String ruc_informante;
     private String razon_informante;
     private String ruc;
