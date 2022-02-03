@@ -88,7 +88,7 @@ import javax.persistence.SqlResultSetMapping;
             "AND c.id_comprobante = ppc.id_comprobante "+
             "AND ppc.id_detalle = dp.iddetalle "+
             "AND dp.id_pago = p.id_pago "+
-            "AND p.fecha_pago BETWEEN '2021-12-01' AND '2021-12-31';", 
+            "AND p.fecha_pago BETWEEN ? AND ?;", 
     resultSetMapping="documentmap")
 
 public class Document {
