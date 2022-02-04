@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
@@ -20,32 +21,26 @@ public class ApiApplication {
 		SpringApplication.run(ApiApplication.class, args);
 	}
 
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-				.allowedOrigins("*")
-				.allowedMethods("PUT", "DELETE", "POST", "GET")
-				.allowedHeaders("header1", "header2", "header3")
-				.exposedHeaders("header1", "header2")
-				.allowCredentials(false).maxAge(3600);
-			}
-		};
-	}
-
 	@EnableWebSecurity
 	@Configuration
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter{
-
 		@Override
 		protected void configure(HttpSecurity http) throws Exception{
-			http.csrf().disable()
+			http.cors().and()
+				.csrf().disable()
 				.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
 				.anyRequest().authenticated();
 		}
 	}
-
+	
+	@Configuration
+	@EnableWebMvc
+	class WebConfig implements WebMvcConfigurer {
+		@Override
+		public void addCorsMappings(CorsRegistry registry) {
+			registry.addMapping("/**");
+		}
+	}
 }
