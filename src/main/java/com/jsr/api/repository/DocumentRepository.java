@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface DocumentRepository extends JpaRepository<Document, Long>{
     @Query(name = "Document.GenerateDocument")
-    public List<Document> GenerateDocument(String fecha_inicio, String fecha_fin);
+    public List<Document> GenerateDocument(String timbrado, String fecha_inicio, String fecha_fin);
 }

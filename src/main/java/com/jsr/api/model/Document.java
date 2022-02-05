@@ -63,14 +63,14 @@ import javax.persistence.SqlResultSetMapping;
             ",p.fecha_pago "+
             ",p.tipo_pago  "+
             ",'NO' MONEDA_EXTRANJERA "+
-            ",'12345678' TIMBRADO "+
+            ",? TIMBRADO "+
             ",p.numFactura "+
-            ",(c.impTotal - c.IVA10 - c.ERSSAN) MONTO_GRAVADO_10 "+
+            ",(c.impTotal - c.ERSSAN) MONTO_GRAVADO_10 "+
             ",c.IVA10  "+
             ",0 MONTO_GRAVADO_5 "+
             ",0 IVA5 "+
             ",0 EXENTO "+
-            ",(c.impTotal - c.IVA10) total_comprobante "+
+            ",(c.impTotal) total_comprobante "+
             ",'NO' IMPUTA_IRE "+
             ",'SI' IMPUTA_IVA "+
             ",'' comprobante_asociado "+

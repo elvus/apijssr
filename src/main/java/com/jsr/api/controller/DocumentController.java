@@ -21,7 +21,8 @@ public class DocumentController {
 
     @RequestMapping(value = "/document", method = RequestMethod.POST)
     public List<Document> getDocument(@RequestBody Map<String, String> params){
-        return documentRepository.GenerateDocument(params.get("fecha_inicio").toString(), params.get("fecha_fin").toString());
+        System.out.println(params.toString());
+        return documentRepository.GenerateDocument(params.get("timbrado").toString(), params.get("fecha_inicio").toString(), params.get("fecha_fin").toString());
     }
     
 }
