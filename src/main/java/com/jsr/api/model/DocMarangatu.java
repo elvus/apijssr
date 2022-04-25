@@ -60,10 +60,10 @@ import org.springframework.util.StringUtils;
             ",p.fecha_pago "+
             ",? TIMBRADO "+
             ",p.numFactura "+
-            ",c.impTotal TOTAL_10 "+
+            ",(c.impTotal+c.IVA10+c.ERSSAN) TOTAL_10 "+
             ",0 TOTAL_5 "+
             ",0 EXENTO "+
-            ",c.impTotal total_comprobante "+
+            ",(c.impTotal+c.IVA10+c.ERSSAN) total_comprobante "+
             ",CASE p.tipo_pago "+
                 "WHEN 'CRÉDITO' THEN "+ 
                 "'2' "+
